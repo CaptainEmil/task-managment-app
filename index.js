@@ -32,3 +32,31 @@ function Task(description, cost) {
         }
     })
 }
+
+class IncomeTask extends Task {
+    constructor(description, cost){
+        super(description, cost);
+    }
+
+    makeDone(budget) {
+        // budget.income + cost
+    }
+
+    makeUnDone(budget) {
+        // budget.income - cost
+    }
+}
+
+class ExpenseTask extends Task {
+    constructor(description, cost){
+        super(description, cost);
+    }
+
+    makeDone(budget) {
+        // budget.expenses + cost
+    }
+
+    makeUnDone(budget) {
+        // budget.expenses - cost
+    }
+}
