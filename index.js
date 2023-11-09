@@ -4,8 +4,8 @@ console.clear();
 
 
 function Task(description, cost) {
-    if (new.target) {
-        throw new Error('Task cannot be called with "new"');
+    if (new.target !== IncomeTask && new.target !==ExpenseTask) {
+        throw new Error("Function constructor Task cannot be invoked with 'new'");
     }
     if (cost < 0) {
         throw new Error('Cost cannot be negative');
@@ -34,7 +34,8 @@ function Task(description, cost) {
 }
 
 class IncomeTask extends Task {
-    constructor(description, cost){
+    
+    constructor(description, cost) {
         super(description, cost);
     }
 
@@ -45,10 +46,12 @@ class IncomeTask extends Task {
     makeUnDone(budget) {
         // budget.income - cost
     }
+    
 }
 
 class ExpenseTask extends Task {
-    constructor(description, cost){
+    
+    constructor(description, cost) {
         super(description, cost);
     }
 
@@ -60,3 +63,18 @@ class ExpenseTask extends Task {
         // budget.expenses - cost
     }
 }
+
+class TasksController {
+    #tasks;
+
+    constructor(tasks) {
+        this.#tasks = tasks;
+    }
+
+    get tasks(){
+        return this.#tasks;
+    }
+
+
+}
+
