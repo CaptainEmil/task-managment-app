@@ -13,7 +13,6 @@ function Task(description, cost) {
     const _id = "id" + Math.random().toString(16).slice(2);
     const _description = description;
     const _cost = cost;
-    let _isDone=false;
 
     Object.defineProperties(this, {
         id: {
@@ -30,14 +29,6 @@ function Task(description, cost) {
             get() {
                 return _cost;
             }
-        },
-        isDone:{
-            get(){
-                return _isDone;
-            },
-            set(isDone){
-                _isDone=isDone;
-            }
         }
     })
 }
@@ -49,12 +40,10 @@ class IncomeTask extends Task {
     }
 
     makeDone(budget) {
-        this.isDone = true;
         // budget.income + cost
     }
 
     makeUnDone(budget) {
-        this.isDone = false;
         // budget.income - cost
     }
 
@@ -68,22 +57,24 @@ class ExpenseTask extends Task {
 
 
     makeDone(budget) {
-        this.isDone = true;
         // budget.expenses + cost
     }
 
     makeUnDone(budget) {
-        this.isDone = false;
         // budget.expenses - cost
     }
 }
 
 class TasksController {
     #tasks;
+    #areTasksDone;
 
     constructor(tasks) {
         this.#tasks = [...tasks];
+        this.#areTasksDone = Array(tasks.length).fill(false);
     }
+
+    
 
     addTasks(...tasks) {
         for (let task of tasks) {
@@ -98,8 +89,13 @@ class TasksController {
         return [...this.#tasks];
     }
 
+    getAreTasksDone() {
+        return [...this.#areTasksDone];
+    }
+
     getTasksSortedBy(string) {
         let arr = [...this.#tasks];
+        
         if (string === 'description') {
             arr.sort(function (a, b) {
                 if (a.description > b.description) {
@@ -117,14 +113,17 @@ class TasksController {
             });
         }
         else if (string === 'status') {
+            let arrOfStatus=[...this.#areTasksDone];
             arr.sort(function (a, b) {
-                if (b.isDone === a.isDone) {
+                const aIsDone=arrOfStatus[arr.indexOf(a)];
+                const bIsDone=arrOfStatus[arr.indexOf(b)];
+                if (bIsDone === aIsDone) {
                     return 0;
                 }
-                if (b.isDone) {
+                if (bIsDone) {
                     return 1;
                 }
-                if (a.isDone) {
+                if (aIsDone) {
                     return -1;
                 }
             });
@@ -167,7 +166,8 @@ class TasksController {
             if (obj.isCompleted) {
                 for (let task of arr) {
                     let index = tempArr.indexOf(task);
-                    if (!task.isDone) {
+                    let taskIsDone=this.#areTasksDone[index];
+                    if (!taskIsDone) {
                         tempArr.splice(index, 1);
                     }
                 }
@@ -175,7 +175,8 @@ class TasksController {
             else {
                 for (let task of arr) {
                     let index = tempArr.indexOf(task);
-                    if (task.isDone) {
+                    let taskIsDone=this.#areTasksDone[index];
+                    if (taskIsDone) {
                         tempArr.splice(index, 1);
                     }
                 }
@@ -186,3 +187,20 @@ class TasksController {
     }
 }
 
+// let task=new IncomeTask('car',200);
+// let arr=[task];
+// for(let i=0; i<10;i++){
+//     arr.push(new ExpenseTask('clone', i*10));
+// }
+// let tasksController=new TasksController(arr);
+
+// let obj={
+//     description: 'car',
+//     isIncome:true,
+//     isCompleted: false
+// }
+
+// console.log(tasksController);
+// console.log(tasksController.getAreTasksDone());
+// console.log(tasksController.getTasksSortedBy('status'));
+// console.log(tasksController.getFilteredTasks(obj));
