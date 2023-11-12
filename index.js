@@ -94,10 +94,10 @@ class TasksController {
         return this.#areTasksDone[this.#tasks.indexOf(task)];
     }
 
-    deleteTask(task){
-        let index=this.#tasks.indexOf(task);
-        if(index!==-1){
-            this.#tasks.splice(index,1);
+    deleteTask(task) {
+        let index = this.#tasks.indexOf(task);
+        if (index !== -1) {
+            this.#tasks.splice(index, 1);
         }
     }
 
@@ -105,13 +105,13 @@ class TasksController {
         return [...this.#areTasksDone];
     }
 
-    makeTaskDone(task,budget){
-        this.#areTasksDone[this.#tasks.indexOf(task)]=true;
+    makeTaskDone(task, budget) {
+        this.#areTasksDone[this.#tasks.indexOf(task)] = true;
         task.makeDone(budget);
     }
 
-    makeTaskUnDone(task,budget){
-        this.#areTasksDone[this.#tasks.indexOf(task)]=false;
+    makeTaskUnDone(task, budget) {
+        this.#areTasksDone[this.#tasks.indexOf(task)] = false;
         task.makeUnDone(budget);
     }
 
@@ -241,38 +241,37 @@ class BudgetController {
     }
 
     deleteTask(task) {
-        if (!(this.#tasksController.getTasks().includes(task))) { 
+        if (!(this.#tasksController.getTasks().includes(task))) {
             console.log(`Task ${task.id} isn't recognized`);
             return;
         }
-        if(this.#tasksController.getTaskIsDone(task)){
-            task.makeUnDone(this.#budget);
+        if (this.#tasksController.getTaskIsDone(task)) {
+            this.#tasksController.makeTaskUnDone(task, this.#budget);
         }
         this.#tasksController.deleteTask(task);
     }
 
-    doneTask(task){
-        if (!(this.#tasksController.getTasks().includes(task))) { 
+    doneTask(task) {
+        if (!(this.#tasksController.getTasks().includes(task))) {
             console.log(`Task ${task.id} isn't recognized`);
             return;
         }
-        if(this.#tasksController.getTaskIsDone(task)){
+        if (this.#tasksController.getTaskIsDone(task)) {
             console.log(`Task is already done`);
             return;
         }
-        this.#tasksController.makeTaskDone(task,this.#budget);
+        this.#tasksController.makeTaskDone(task, this.#budget);
     }
 
-    unDoneTask(task){
-        if (!(this.#tasksController.getTasks().includes(task))) { 
+    unDoneTask(task) {
+        if (!(this.#tasksController.getTasks().includes(task))) {
             console.log(`Task ${task.id} isn't recognized`);
             return;
         }
-        if(!(this.#tasksController.getTaskIsDone(task))){
+        if (!(this.#tasksController.getTaskIsDone(task))) {
             console.log(`Task isn't done before`);
             return;
         }
-        this.#tasksController.makeTaskUnDone(task,this.#budget);
+        this.#tasksController.makeTaskUnDone(task, this.#budget);
     }
 }
-
